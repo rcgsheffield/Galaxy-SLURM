@@ -4,7 +4,27 @@ This repository contains the configuration for [connecting the Galaxy to a HPC c
 
 # Installation
 
-To install and run Galaxy on a local Linux machine
+To install and run Galaxy on the HPC, [connect to the cluster using secure shell](https://docs.hpc.shef.ac.uk/en/latest/hpc/connecting.html#gsc.tab=0) (SSH).
+
+Run an interactive session on a worker node
+
+```bash
+srun --pty bash -i
+```
+
+Load the [Anaconda Python](https://docs.hpc.shef.ac.uk/en/latest/stanage/software/apps/python.html#gsc.tab=0) module
+
+```bash
+module load Anaconda3
+```
+
+Create a virtual environment
+
+```bash
+conda create -n galaxy -c conda-forge python=3.12 glib yarn
+source activate galaxy
+export GALAXY_CONDA_ENV=galaxy
+```
 
 See: [Get Galaxy](https://galaxyproject.org/admin/get-galaxy/) on the Galaxy Community Hub.
 
@@ -14,7 +34,7 @@ git clone -b "$galaxy_version" https://github.com/galaxyproject/galaxy.git
 cd galaxy
 ```
 
-This script will install the dependencies for Galaxy and run a local web server at [port 8080](http://localhost:8080/)
+This script will install the dependencies for Galaxy and run the web server on port 8080
 
 
 ```bash
@@ -23,7 +43,13 @@ bash run.sh
 
 # Usage
 
-TODO
+From your local machine, use secure shell to create a tunnel to the Galaxy port.
+
+```bash
+ssh -L 8080:10.10.1.1:8080 stanage
+```
+
+On your local machine, use a web browser to open http://localhost:8080/ 
 
 # Further reading
 
