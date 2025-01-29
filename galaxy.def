@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%post
+  #  Install dependencies
+  # lib2to3 issue: https://github.com/galaxyproject/galaxy/issues/16854
+  apt-get update && apt-get install -y python3.12 python3.12-venv python3-lib2to3 wget
+  
+  # Install Galaxy
+  # https://galaxyproject.org/admin/get-galaxy
+  # https://docs.galaxyproject.org/en/master/admin/framework_dependencies.html
+  wget https://github.com/galaxyproject/galaxy/archive/master.tar.gz \
+  && tar -xzf master.tar.gz && mv galaxy-master /opt/galaxy \
+  && rm master.tar.gz
+  
+  # Install dependencies
+  python3.12 -m venv /opt/galaxy/.venv
+  /opt/galaxy/.venv/bin/pip install --upgrade -r /opt/galaxy/requirements.txt
+
+  cd /opt/galaxy
+  bash /opt/galaxy/scripts/common_startup.sh
+
+%environment
+  export PATH=/opt/galaxy/.venv/bin:$PATH
+
+%runscript
+  bash /opt/galaxy/run.sh
