@@ -14,14 +14,20 @@ From: ubuntu:24.04
   && rm master.tar.gz
   
   # Install dependencies
-  python3.12 -m venv /opt/galaxy/.venv
+  python3 -m venv /opt/galaxy/.venv
+  /opt/galaxy/.venv/bin/python --version
   /opt/galaxy/.venv/bin/pip install --upgrade -r /opt/galaxy/requirements.txt
 
   cd /opt/galaxy
   bash /opt/galaxy/scripts/common_startup.sh
+  
+  # Configure
+  cp --verbose /opt/galaxy/config/galaxy.yml.sample /opt/galaxy/config/galaxy.yml
 
 %environment
   export PATH=/opt/galaxy/.venv/bin:$PATH
+  export GALAXY_CONFIG_HTTP_BIND="0.0.0.0"
+  export GALAXY_CONFIG_HTTP_PORT="8080"
 
 %runscript
   bash /opt/galaxy/run.sh

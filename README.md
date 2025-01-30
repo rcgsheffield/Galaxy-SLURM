@@ -19,7 +19,7 @@ apptainer build --force galaxy.sif galaxy.def
 Upload the image to the cluster
 
 ```bash
-rsync galaxy.sif stanage:~/galaxy.sif
+rsync --verbose galaxy.sif stanage:~/galaxy.sif
 ```
 
 Create a directory to contain the Galaxy database, used for its working operations.
@@ -32,13 +32,23 @@ ssh stanage "mkdir --parents galaxy/database"
 
 Access the cluster using a [graphical desktop session](https://docs.hpc.shef.ac.uk/en/latest/hpc/flight-desktop.html#gsc.tab=0).
 
-Open a terminal and run the following command to run Galaxy.
+Open a terminal and run the following [`apptainer run`](https://apptainer.org/docs/user/main/cli/apptainer_run.html) command to run Galaxy.
 
 ```bash
-/usr/local/bin/apptainer run --bind galaxy/database:/opt/galaxy/database --net --network-args "portmap=8080:8080/tcp" galaxy.sif
+/usr/local/bin/apptainer run --bind galaxy/database:/opt/galaxy/database galaxy.sif
 ```
 
 Open a web browser and open http://localhost:8080
+
+## Container shell
+
+To run a shell inside the container using the [apptainer shell`](https://apptainer.org/docs/user/main/cli/apptainer_shell.html) command
+
+```bash
+/usr/local/bin/apptainer shell galaxy.sif
+```
+
+
 
 # Further reading
 
